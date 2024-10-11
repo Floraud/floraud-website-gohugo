@@ -2,9 +2,9 @@ services:
   hugo:
     image: "hugomods/hugo:base-0.134.3"
     # La commande ci-dessous est obligatoire pour lancer le service
-    command: server
+    command: server --appendPort=false --baseURL="floraud.fr/"
     volumes:
-      - "$PWD/src:/src"
-      - "$PWD/hugo_cache:/tmp/hugo_cache"
+      - "/volume1/docker/floraud-website-gohugo/src:/src"
+      - "/volume1/docker/floraud-website-gohugo/hugo_cache:/tmp/hugo_cache"
     ports:
       - "1313:1313"

@@ -4,7 +4,7 @@ Je souhaitais faire un blog mais je trouvais ça trop lourd en ressources et adm
 ## docker-compose
 Pour déployer le site, j'utilise un fichier **docker-compose.yml**. L'image docker provient de [HugoMods](https://docker.hugomods.com/docs/development/docker-compose/).
 
-Pour lancer le site, dans le dossier docker, il faudra jouer la commande `docker compose up`
+Pour lancer le site, dans le dossier docker, il faudra jouer la commande `docker compose -f <filename> up`
 
 ## Hugo
 Le thème [Ananke](https://github.com/theNewDynamic/gohugo-theme-ananke) est le thème proposé dans le [quick start](https://gohugo.io/getting-started/quick-start/) du site Hugo et il semblait convenir à mon besoin. J'ai donc décidé de commencer avec et de l'adapter à mes envies.
