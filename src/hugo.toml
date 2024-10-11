@@ -1,0 +1,54 @@
+title = "Floraud"
+baseURL = "https://floraud.fr"
+languageCode = "fr"
+theme = ["gohugo-theme-ananke"]
+# Dossier dans lequel seront stockés des fichiers optimisés que Hugo traite en interne
+resourceDir = "../resources"
+# La description ci-dessous aide à la description des metadata
+description = "Blog personnel sur la tech et mes autres passions"
+
+DefaultContentLanguage = "fr"
+# Commenter la section du dessous permet de ne pas reprendre automatiquement les dossiers comme "content/postes/"
+# SectionPagesMenu = "main"
+Paginate = 3 # this is set low for demonstrating with dummy content. Set to a higher number
+# googleAnalytics = ""
+enableRobotsTXT = true
+
+[sitemap]
+  # Permet au moteur de recherche d'indexer plus efficacement le site en suivant les consignes
+  changefreq = "monthly"
+  priority = 0.5
+  filename = "sitemap.xml"
+
+[params]
+  text_color = "black"
+  author = "Floraud"
+  favicon = ""
+  site_logo = ""
+  # La description ci-dessous permet de reprendre ce paramètre dans un template
+  description = "Le blog d'un passionné d'informatique à propos de ses loisirs"
+  # choose a background color from any on this page: https://tachyons.io/docs/themes/skins/ and preface it with "bg-"
+  background_color_class = "bg-black"
+  recent_posts_number = 3
+
+[[menu.main]]
+   name = "Tech"
+   url = "categories/Tech/"
+   weight = 10
+
+[[menu.main]]
+  name = "Maison"
+  url = "/categories/Maison/"
+  weight = 20
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[[params.ananke_socials]]
+  name ="gitlab"
+  url = "https://gitlab.com/Floraud/"
+
+[[params.ananke_socials]]  
+  name = "github"
+  url = "https://github.com/Floraud/"

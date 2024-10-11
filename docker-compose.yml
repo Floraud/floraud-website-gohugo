@@ -1,0 +1,10 @@
+services:
+  hugo:
+    image: "hugomods/hugo:base-0.134.3"
+    # La commande ci-dessous est obligatoire pour lancer le service
+    command: server
+    volumes:
+      - "$PWD/src:/src"
+      - "$PWD/hugo_cache:/tmp/hugo_cache"
+    ports:
+      - "1313:1313"

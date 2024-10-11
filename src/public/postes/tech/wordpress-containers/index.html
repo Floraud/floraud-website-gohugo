@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Déploiement de containers WordPress sur un serveur avec Docker Compose | Floraud</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="Introduction
+Nous allons étudier au cours cet article comment déployer plusieurs containers WordPress avec leurs bases de données et leurs certificats Let&rsquo;s Encrypt sur un seul serveur avec Docker Compose. Mon but est d&rsquo;optimiser l&rsquo;utilisation de mon serveur VPS au maximum, faire des économies et aussi pouvoir PoCer plus facilement des solutions d&rsquo;infra qui proposent souvent des containers pour tester leurs services rapidement. Le code lié à cet article est disponible sur le repo GitLab du lab.">
+    <meta name="generator" content="Hugo 0.134.3">
+    
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    
+      <meta name="author" content = "Floraud">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+    
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/postes/tech/wordpress-containers/">
+    
+
+    <meta property="og:url" content="http://localhost:1313/postes/tech/wordpress-containers/">
+  <meta property="og:site_name" content="Floraud">
+  <meta property="og:title" content="Déploiement de containers WordPress sur un serveur avec Docker Compose">
+  <meta property="og:description" content="Introduction Nous allons étudier au cours cet article comment déployer plusieurs containers WordPress avec leurs bases de données et leurs certificats Let’s Encrypt sur un seul serveur avec Docker Compose. Mon but est d’optimiser l’utilisation de mon serveur VPS au maximum, faire des économies et aussi pouvoir PoCer plus facilement des solutions d’infra qui proposent souvent des containers pour tester leurs services rapidement. Le code lié à cet article est disponible sur le repo GitLab du lab.">
+  <meta property="og:locale" content="fr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="postes">
+    <meta property="article:published_time" content="2024-01-14T18:07:07+01:00">
+    <meta property="article:modified_time" content="2024-01-14T18:07:07+01:00">
+    <meta property="article:tag" content="DevOps">
+    <meta property="article:tag" content="Docker Compose">
+    <meta property="article:tag" content="Container">
+    <meta property="article:tag" content="WordPress">
+    <meta property="article:tag" content="Traefik">
+
+  <meta itemprop="name" content="Déploiement de containers WordPress sur un serveur avec Docker Compose">
+  <meta itemprop="description" content="Introduction Nous allons étudier au cours cet article comment déployer plusieurs containers WordPress avec leurs bases de données et leurs certificats Let’s Encrypt sur un seul serveur avec Docker Compose. Mon but est d’optimiser l’utilisation de mon serveur VPS au maximum, faire des économies et aussi pouvoir PoCer plus facilement des solutions d’infra qui proposent souvent des containers pour tester leurs services rapidement. Le code lié à cet article est disponible sur le repo GitLab du lab.">
+  <meta itemprop="datePublished" content="2024-01-14T18:07:07+01:00">
+  <meta itemprop="dateModified" content="2024-01-14T18:07:07+01:00">
+  <meta itemprop="wordCount" content="1960">
+  <meta itemprop="keywords" content="DevOps,Docker Compose,Container,WordPress,Traefik">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Déploiement de containers WordPress sur un serveur avec Docker Compose">
+  <meta name="twitter:description" content="Introduction Nous allons étudier au cours cet article comment déployer plusieurs containers WordPress avec leurs bases de données et leurs certificats Let’s Encrypt sur un seul serveur avec Docker Compose. Mon but est d’optimiser l’utilisation de mon serveur VPS au maximum, faire des économies et aussi pouvoir PoCer plus facilement des solutions d’infra qui proposent souvent des containers pour tester leurs services rapidement. Le code lié à cet article est disponible sur le repo GitLab du lab.">
+
+	
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  
+  <header class="cover bg-top" style="background-image: url('https://nas.floraud.fr/drive/d/s/10RXdWk5cmWdqY0zLyisEsgAXE7JUQ11/webapi/entry.cgi/erwan-hesry-RJjY5Hpnifk-unsplash.jpg?api=SYNO.SynologyDrive.Files&amp;method=download&amp;version=2&amp;files=%5B%22id%3A845313007207627857%22%5D&amp;force_download=false&amp;download_type=%22download%22&amp;sharing_token=%22bxe2m6u0IFuySAom9sR50xe4j3dkaLaGExYSl1gUalysW4eCEcGb1.Nw_zyp3RWC7Iq2sXq777aE4qY1c_TswUDoEI8VRtuswnblX6pMKwtlFGhr54ZiQgGJLdagM9YdSomPf0_2bnx1PJxwNhvNqtcp5Syw3v.bMIYbIvufe2U7VbEl59x3V.zGc2GPNiJl1a9pCqhkov96b.I_QcQGAUW8ixqKnHELP.ebTdjsnSS5sllUMG6Ee5hv%22&amp;_dc=1728452729264');">
+    <div class="bg-black-60">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Floraud
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="categories/Tech/" title="Tech page">
+              Tech
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="/categories/maison/" title="Maison page">
+              Maison
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+<div class="ananke-socials">
+  
+    
+    <a href="https://gitlab.com/Floraud/" target="_blank" rel="noopener" class="gitlab ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitLab link" aria-label="follow on GitLab——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M29.782 199.732L256 493.714 8.074 309.699c-6.856-5.142-9.712-13.996-7.141-21.993l28.849-87.974zm75.405-174.806c-3.142-8.854-15.709-8.854-18.851 0L29.782 199.732h131.961L105.187 24.926zm56.556 174.806L256 493.714l94.257-293.982H161.743zm349.324 87.974l-28.849-87.974L256 493.714l247.926-184.015c6.855-5.142 9.711-13.996 7.141-21.993zm-85.404-262.78c-3.142-8.854-15.709-8.854-18.851 0l-56.555 174.806h131.961L425.663 24.926z"></path></svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+    
+    <a href="https://github.com/Floraud/" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+</div>
+
+    </div>
+  </div>
+</nav>
+
+      <div class="tc-l pv6 ph3 ph4-ns">
+        
+          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Déploiement de containers WordPress sur un serveur avec Docker Compose</div>
+          
+        
+      </div>
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Postes
+      </aside>
+      
+
+
+
+
+
+
+
+
+
+
+  <div id="sharing" class="mt3 ananke-socials">
+    
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Déploiement de containers WordPress sur un serveur avec Docker Compose</h1>
+      
+      <p class="tracked">
+        Par <strong>Floraud</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-01-14T18:07:07+01:00">janvier 14, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links black pr4-l w-two-thirds-l"><h2 id="introduction">Introduction</h2>
+<p>Nous allons étudier au cours cet article comment déployer plusieurs containers WordPress avec leurs bases de données et leurs certificats Let&rsquo;s Encrypt sur un seul serveur avec Docker Compose. Mon <strong>but</strong> est d&rsquo;<strong>optimiser l&rsquo;utilisation de mon serveur VPS au maximum</strong>, <strong>faire des économies</strong> et aussi pouvoir <strong>PoCer plus facilement des solutions d&rsquo;infra</strong> qui proposent souvent des containers pour tester leurs services rapidement. Le code lié à cet article est disponible sur <a href="https://gitlab.com/Floraud/wordpress-docker">le repo GitLab du lab</a>.</p>
+<h3 id="définition-des-concepts">Définition des concepts</h3>
+<ul>
+<li><strong>Container</strong> : Un <strong>environnement isolé sur un serveur</strong> dans lequel est <strong>cloisonnée une application ainsi que ses dépendances</strong>. Son intérêt réside dans son isolation car, tout en partageant les ressources du noyau, les différents containers peuvent chacun avoir une version différente d&rsquo;une dépendance qui aurait pu être commune sur le serveur. Par exemple, dans le contexte des serveurs WordPress, chaque conteneur peut avoir sa propre version de PHP sans interférer avec l&rsquo;environnement du serveur ou des autres containers, offrant ainsi une gestion des dépendances plus flexible et évitant les conflits potentiels entre les différentes applications hébergées sur le même serveur. Aussi, ils sont <strong>indépendants de l&rsquo;environnement hôte</strong>, ce qui permet leur portabilité et de les déployer aussi bien sur un PC personnel que sur un serveur Windows ou Linux.</li>
+<li><strong>Docker</strong> : Docker est une plateforme de conteneurisation qui permet de <strong>gérer lesdits containers</strong>. Il regroupe <strong>différents outils permettant l&rsquo;exploitation des containers</strong> tels que son moteur exécutant les containers, le registre pour les consulter ainsi que leurs volumes de données et leurs réseaux. Il y a aussi <strong>Docker Compose</strong> permettant de spécifier les paramètres de lancement des containers. Docker fournit aussi des images officielles standardisées mises à disposition par les mainteneurs des applications via son catalogue <strong>Docker Hub</strong>.</li>
+<li><strong>Let&rsquo;s Encrypt</strong> : Autorité de certification permettant de <strong>générer des certificats</strong> gratuitement et automatiquement pour activer l&rsquo;<strong>HTTPS</strong> sur les sites web et offrir une identification ainsi qu&rsquo;un chiffrement de bout en au bout aux utilisateurs.</li>
+<li><strong>Traefik</strong> : Dans notre cas, ça sera notre <strong>reverse proxy</strong>, c&rsquo;est à dire que ça sera l&rsquo;application qui <strong>triera les requêtes HTTP</strong> en fonction du nom de domaine contenu dans la requête pour les diriger vers le bon container. Il nous permet aussi de <strong>gérer le certificat Let&rsquo;s Encrypt et rediriger le trafique de l&rsquo;HTTP vers l&rsquo;HTTPS</strong>.</li>
+<li><strong>WordPress</strong> : Un CMS (Content Management System) permettant de <strong>gérer simplement le contenu d&rsquo;un site web</strong> comme celui sur lequel vous êtes actuellement connecté. WordPress est le plus populaire et il permet d&rsquo;alimenter son site ou son blog sans avoir à mettre les mains dans le code. Son container contient les dépendances nécessaires au bon fonctionnement de l&rsquo;application (Apache, PHP&hellip;) et nécessite l&rsquo;utilisation d&rsquo;un container de base de donnée en parallèle.</li>
+</ul>
+<h2 id="déploiement-du-lab">Déploiement du lab</h2>
+<h3 id="prérequis">Prérequis</h3>
+<ul>
+<li>Un <strong>serveur</strong> Linux fraîchement installé (<strong>lab testé sur Alma 8.5</strong> et Debian 12). Personnellement j&rsquo;ai pris l&rsquo;offre STD-2 sur <strong><a href="https://pulseheberg.com/cloud/vps-linux">PulseHeberg</a></strong>, c&rsquo;est 4€ par mois, ça fonctionne bien et c&rsquo;est français.</li>
+<li><strong>Docker installé</strong> : ça prend 5 minutes en suivant la <a href="https://docs.docker.com/engine/install/">documentation officielle</a>, il faut suivre la Platform CentOS si vous prenez Alma ou Rocky.</li>
+<li><strong>Enregistrement DNS</strong> pour chaque site que l&rsquo;on veut déployer. Par exemple : <em>site1.votredomaine.com, site2.votredomaine.com</em>&hellip;</li>
+<li>Téléchargez le <strong><a href="https://gitlab.com/Floraud/wordpress-docker/-/archive/v0.1.0/wordpress-docker-v0.1.0.tar.gz">code du git du lab</a></strong> en fonction de l&rsquo;hôte. Sur Alma il suffit de faire <code>curl -L0 https://gitlab.com/Floraud/wordpress-docker/-/archive/v0.1.0/wordpress-docker-v0.1.0.tar.gz | tar -xz</code> pour télécharger le code et décompresser le fichier.</li>
+</ul>
+<h3 id="architecture">Architecture</h3>
+<p>L&rsquo;objectif à la fin est de disposer de l&rsquo;architecture suivante sur le serveur :</p>
+<ul>
+<li>Seul Traefik doit être en contact avec Internet.</li>
+<li>Chaque container WordPress ne doit entrer qu&rsquo;en communication avec Traefik et son propre MariaDB.</li>
+<li>Chaque site a son propre réseau isolé de l&rsquo;autre site.</li>
+</ul>
+<p><img src="https://nas.floraud.fr/drive/d/s/10RXFrGTXO8aeCS2k91txfU1zsgxttxY/webapi/entry.cgi/wordpress-containers_topology.png?api=SYNO.SynologyDrive.Files&amp;method=download&amp;version=2&amp;files=%5B%22id%3A845311662803172373%22%5D&amp;force_download=false&amp;download_type=%22download%22&amp;sharing_token=%22Y9nb9ARC.BKYmLZzZa8UPqmvBAs4oQTPIx_Dnbr_a2lyHQNdUOgP7vWcDJQHv0YTm6AOYShoccSmaxr9iGVOlO16wjVLah.R93TBg5k54udOof7H227IyZ_aXiLXeYhcAjqPmH9Gx5mWq_cLToyLmXLEE5tjDJg_gnL4_OlLzQBH_q8b3ZyhQAmaofJE2jnC1BpjT3CSBr.DiIQi14fXnhKdut_5uJam3_e1RMFNliUkT4Ehj2m4meqp%22&amp;_dc=1728452145945" alt="topologie"></p>
+<p>Pour que le code soit plus facilement exploitable, il a été divisé en différents fichiers :</p>
+<ul>
+<li><code>docker-compose.yml</code> : contient la configuration réseau.</li>
+<li><code>docker-compose-site1.yml</code> et <code>docker-compose-site2.yml</code> contiennent les informations relatives aux différents site que l&rsquo;on va mettre sur le cluster.</li>
+<li>Pour tout autre site que l&rsquo;on voudrait ajouter, il suffit d&rsquo;ajouter un réseau dans le fichier <code>docker-compose.yml</code> relatif à Traefik comme nous le verrons et copier un des fichiers <code>docker-compose-sitex.yml</code> en modifiant les variables nécessaires.</li>
+<li>Il y a finalement les dossiers comprenant les fichiers de mot de passe par défaut qu&rsquo;il faudra modifier avec vos propres comptes et mdp.</li>
+</ul>
+<h3 id="premier-fichier--traefik">Premier fichier : Traefik</h3>
+<p>Traefik, configuré dans le fichier <code>docker-compose.yml</code>, sera le cœur de notre architecture. Comme présenté auparavant, c&rsquo;est lui qui va rediriger les requêtes aux différents WordPress sur la base des URL appelées et qui va obtenir les certificats Let&rsquo;s Encrypt pour le chiffrement des sites. On déclare aussi dans ce fichier nos réseaux. On va étudier les différentes lignes de code que l&rsquo;on y trouve.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;2.21.0&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">traefik</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#e6db74">&#34;traefik:v2.10&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#e6db74">&#34;traefik&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">command</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#- &#34;--log.level=DEBUG&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#- &#34;--api.insecure=true&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--providers.docker=true&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--providers.docker.exposedbydefault=false&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Redirection vers l&#39;https</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--entrypoints.web.address=:80&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--entrypoints.web.http.redirections.entrypoint.to=websecure&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--entryPoints.web.http.redirections.entrypoint.scheme=https&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># HTTPS</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--entrypoints.websecure.address=:443&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--certificatesresolvers.myresolver.acme.tlschallenge=true&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#- &#34;--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--certificatesresolvers.myresolver.acme.email=exemple@domain.com&#34;</span> <span style="color:#75715e"># Do not forget to modify mail address</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;80:80&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;443:443&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#- &#34;8080:8080&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;./letsencrypt:/letsencrypt&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;/var/run/docker.sock:/var/run/docker.sock:ro&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">wp1-net</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">wp2-net</span>:
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wp1-net</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wp2-net</span>:
+</span></span></code></pre></div><ul>
+<li><code>version</code> : On donne la version de Docker Compose pour laquelle le fichier doit être interprété.</li>
+<li><code>services</code> : Nomme les service employés, ici c&rsquo;est <code>traefik</code> et c&rsquo;est ainsi qu&rsquo;on y fera référence si besoin pour d&rsquo;autres services.</li>
+<li><code>image</code> : On explicite quelle image de Docker Hub utilisée. Personnellement je préfère expliciter la version afin de la figer et de pouvoir corréler en cas de problème un bug avec une version. Il est aussi possible de créer ses images Docker customisées mais ne ne le verrons pas dans cet article.</li>
+<li><code>#- &quot;--log.level=DEBUG&quot;</code> : utilisé de concert avec <code>#- &quot;--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory&quot;</code> pour du debug certificat, je l&rsquo;ai laissé en as de besoin.</li>
+<li><code>#- &quot;--api.insecure=true&quot;</code> associé à la ligne <code>- &quot;8080:8080&quot;</code> dans les ports permet d&rsquo;avoir accès au dashboard Traefik. Dans le cadre d&rsquo;un PoC ça peut être utilisé pour comprendre un peu le fonctionnement, mais n&rsquo;y voyant pas d&rsquo;utilité, je l&rsquo;ai désactivé.</li>
+<li><code>- &quot;--providers.docker=true&quot;</code> : on dit à Traefik de surveiller Docker via son API pour voir les nouveaux containers mis en ligne.</li>
+<li><code>networks</code> : Le premier niveau, celui avec la même indentation que <code>volumes</code> sert à placer le container Traefik dans les réseaux généraux que l&rsquo;on a déclaré ensemble, à savoir <code>wp1-net</code> et <code>wp2-net</code>. Le deuxième, tout en bas du fichier, sert à créer les réseaux en question. Un /16 par défaut.</li>
+<li><code>- &quot;--providers.docker.exposedbydefault=false&quot;</code> : on lui dit de ne pas exposer par défaut tous les containers qu&rsquo;il voit via l&rsquo;API Docker, comme les bases de données où les <em><strong>sidecars</strong></em> WP-CLI.</li>
+<li>Le bloc ci-dessous permet simplement de rediriger le trafique HTTP qui arrive sur le port 80 vers l&rsquo;HTTPS pour que tout le trafique soit chiffré.</li>
+</ul>
+<pre tabindex="0"><code>      - &#34;--entrypoints.web.address=:80&#34;
+      - &#34;--entrypoints.web.http.redirections.entrypoint.to=websecure&#34;
+      - &#34;--entryPoints.web.http.redirections.entrypoint.scheme=https&#34;
+</code></pre><ul>
+<li><code>- &quot;--entrypoints.websecure.address=:443&quot;</code> : On définit le port <strong>443</strong> pour utiliser l&rsquo;HTTPS avec le point d&rsquo;entrée websecure.</li>
+<li><code>- &quot;--certificatesresolvers.myresolver.acme.tlschallenge=true&quot;</code> : on active le challenge TLS pour pouvoir demander un certificat Let&rsquo;s Encrypt.</li>
+</ul>
+<pre tabindex="0"><code>      - &#34;--certificatesresolvers.myresolver.acme.tlschallenge=true&#34;
+      #- &#34;--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory&#34;
+      - &#34;--certificatesresolvers.myresolver.acme.email=exemple@domain.com&#34; # Do not forget to modify mail address
+      - &#34;--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json&#34;
+</code></pre><ul>
+<li><code>volumes</code> : on explicite où stocker le certificat Let&rsquo;s Encrypt.</li>
+<li><code>&quot;/var/run/docker.sock:/var/run/docker.sock:ro&quot;</code> : permet à Traefik d’interagir avec le démon Docker en montant le fichier socket du système hôte pour apprendre dynamiquement la présence d&rsquo;un container.</li>
+</ul>
+<h3 id="deuxième-fichier--stack-du-site-web">Deuxième fichier : stack du site web</h3>
+<p>Sans revenir sur les catégories déjà définies, nous allons étudier les lignes spécifiques au site web. Ce fichier permet de déclarer dans leur réseau respectif un container WordPress associé à une base de donnée et un container WP-CLI qui permet de préconfigurer le site web. J&rsquo;utilise WP-CLI parce que je trouvais ça ennuyeux de refaire la configuration de base avant de fournir les identifiants de connexion à un client.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;2.21.0&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:  
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">mariadb-1</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#e6db74">&#34;mariadb:11.1.3-jammy&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#e6db74">&#34;always&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#e6db74">&#34;mariadb-1&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db-data-1:/var/lib/mysql&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db1-root&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;MYSQL_DATABASE_FILE=/run/secrets/db1-db&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;MYSQL_USER_FILE=/run/secrets/db1-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;MYSQL_PASSWORD_FILE=/run/secrets/db1-pwd-user&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;wp1-net&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;traefik.enable=false&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">secrets</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-root&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-db&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-pwd-user&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wordpress-1</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">depends_on</span>: 
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;mariadb-1&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#e6db74">&#34;wordpress:6.4.1&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#e6db74">&#34;always&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#e6db74">&#34;wordpress-1&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;wp-data-1:/var/www/html&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_HOST=mariadb-1&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_USER_FILE=/run/secrets/db1-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_PASSWORD_FILE=/run/secrets/db1-pwd-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_NAME_FILE=/run/secrets/db1-db&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;traefik.enable=true&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;traefik.http.routers.wordpress-1.rule=Host(`site1.floraud.fr`)&#34;</span>  <span style="color:#75715e"># Do not forget to change this line and have your dns record</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;traefik.http.routers.wordpress-1.entrypoints=websecure&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;traefik.http.routers.wordpress-1.tls.certresolver=myresolver&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;wp1-net&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">secrets</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-db&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-pwd-user&#34;</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wordpress-cli-1</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">depends_on</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;mariadb-1&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;wordpress-1&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#e6db74">&#34;wordpress:cli&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#e6db74">&#34;wordpress-cli-1&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_HOST=mariadb-1&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_USER_FILE=/run/secrets/db1-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_PASSWORD_FILE=/run/secrets/db1-pwd-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;WORDPRESS_DB_NAME_FILE=/run/secrets/db1-db&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;wp-data-1:/var/www/html&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">entrypoint</span>: <span style="color:#ae81ff">sh</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">command</span>: -<span style="color:#ae81ff">c &#39;sleep 40; wp core install --url=&#34;site1.floraud.fr&#34; --title=&#34;toto&#34; --admin_name=toto --admin_password=&#34;toto&#34; --admin_email=toto@toto.com&#39;</span> <span style="color:#75715e"># You have to change url, title, admin_name, admin_password and admin_email. After deployment, do not forget to change admin_password</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">wp1-net</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;traefik.enable=false&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">secrets</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-db&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-user&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;db1-pwd-user&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">db-data-1</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wp-data-1</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">secrets</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">db1-root</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">file</span>: <span style="color:#e6db74">&#34;db1-secret/db1-root.txt&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">db1-db</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">file</span>: <span style="color:#e6db74">&#34;db1-secret/db1-db.txt&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">db1-user</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">file</span>: <span style="color:#e6db74">&#34;db1-secret/db1-user.txt&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">db1-pwd-user</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">file</span>: <span style="color:#e6db74">&#34;db1-secret/db1-pwd-user.txt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">networks</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wp1-net</span>:
+</span></span></code></pre></div><ul>
+<li><code>restart</code> : Permet de toujours redémarrer le conteneur en cas de problème, il existe aussi <code>no</code>, <code>unless-stopped</code> ou <code>on-failure</code>.</li>
+<li><code>environment</code> : Permet de passer des variables d&rsquo;environnement au container, ici on lui définit les secrets qui sont configurés après pour ne pas mettre les mots de passe en dur dans le Docker Compose.</li>
+<li><code>container_name</code> : permet de référencer le container plus facilement dans Docker plutôt que laisser Docker lui donner un nom aléatoire mais ce n&rsquo;est pas lié au Docker Compose comme <code>service</code>.</li>
+<li><code>secrets</code> : On donne des noms des fichiers qui contiennent les variables secrètes comme les mot de passe.</li>
+<li><code>labels</code> : Permet de définir l&rsquo;interaction avec Traefik. Si on souhaite que Traefik expose le service ou non, par quel nom de domaine le service est appelé, sur quel protocole et si on souhaite obtenir un certificat Let&rsquo;s Encrypt.</li>
+<li><code>depends on</code> : Indique que le service dépend d&rsquo;un autre service et Docker démarre les services dans l&rsquo;ordre que l&rsquo;on configure.</li>
+<li><code>entrypoint</code> : Comment on entre sur le container. Ici c&rsquo;est <code>sh</code> parce que l&rsquo;on entre via le shell.</li>
+<li><code>command</code> : qui suit l&rsquo;<code>entrypoint</code> pour passer la commande shell que l&rsquo;on désire.</li>
+</ul>
+<h2 id="exploitation">Exploitation</h2>
+<h3 id="paramétrage">Paramétrage</h3>
+<ul>
+<li>Dans <code>/db1-secret</code> et <code>/db2-secret</code>, modifiez les comptes et mots de passe.</li>
+<li>Dans <code>docker-compose.yml</code>, modifiez votre adresse mail pour savoir si votre certificat arrive à expiration à cette ligne <code>- &quot;--certificatesresolvers.myresolver.acme.email=exemple@domain.com&quot;</code>.</li>
+<li>Dans <code>docker-compose-site1.yml</code>, modifiez :
+<ul>
+<li><code>&quot;traefik.http.routers.wordpress-1.rule=Host(`site1.floraud.fr`)&quot; : pour mettre votre domaine.</code></li>
+<li><code>command: -c 'sleep 40; wp core install --url=&quot;site1.floraud.fr&quot; --title=&quot;toto&quot; --admin_name=toto --admin_password=&quot;toto&quot; --admin_email=toto@toto.com : changez avec vos informations.</code></li>
+<li>Faire de même avec vos autres sites pour les fichiers <code>docker-compose-site[x].yml</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="déploiement">Déploiement</h3>
+<p>Dans le dossier, lancez le déploiement des containers à l&rsquo;aide de <code>docker compose -f docker-compose.yml -f docker-compose-site1.yml up -d</code> (ça prend environ 40 secondes pour que le sidecar WP-CLI fasse son office, vous pouvez allonger ou réduire le temps en fonction de la réactivité de votre host en remplacant <code>command: -c 'sleep 40</code> par la la valeur que vous préferez).</p>
+<ul>
+<li>Vous pouvez lancer le site2 à l&rsquo;aide de <code>docker compose -f docker-compose-site2.yml up -d</code>.</li>
+<li>Vous pouvez arretez les containers en utilisant les commandes <code>docker compose -f docker-compose-site2.yml down</code> ou <code>docker compose -f docker-compose.yml -f docker-compose-site1.yml down</code>.</li>
+</ul>
+<h3 id="visualisation-et-navigation">Visualisation et navigation</h3>
+<ul>
+<li>Voir les logs d&rsquo;un container : <code>docker logs &lt;name&gt;</code>.</li>
+<li>Contrôler les containers toujours présents : <code>docker ps</code>.</li>
+<li>Contrôler les volumes toujours présents : <code>docker volume ls</code>.</li>
+<li>Contrôler les réseaux toujours présents : <code>docker network ls</code>.</li>
+<li>Pour supprimer tous les volumes créés qui ne sont pas en cours d&rsquo;exécution <code>docker volume prune --all</code>.</li>
+<li>Pour supprimer des réseaux qui ne sont pas en cours d&rsquo;exécution <code>docker network prune --all</code>.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Bien que ce lab soit imparfait pour de la production car il n&rsquo;y a pas d&rsquo;orchestration pour gérer le cycle de vie des containers et la haute-disponibilité (ce que permet de faire un outil comme Kubernetes), on est maintenant en mesure de déployer simplement et à volonté des containers sur notre serveur pour réaliser nos tests sans nous ruiner. Cela nous a permis de découvrir le concept de container et une des solutions majeures sur le marché qu&rsquo;est Docker pour pouvoir monter des labs rapidement.</p>
+<ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/devops/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">DevOps</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/docker-compose/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Docker Compose</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/container/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Container</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/wordpress/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">WordPress</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/traefik/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Traefik</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://localhost:1313/" >
+    &copy;  Floraud 2024 
+  </a>
+    <div>
+<div class="ananke-socials">
+  
+    
+    <a href="https://gitlab.com/Floraud/" target="_blank" rel="noopener" class="gitlab ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitLab link" aria-label="follow on GitLab——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M29.782 199.732L256 493.714 8.074 309.699c-6.856-5.142-9.712-13.996-7.141-21.993l28.849-87.974zm75.405-174.806c-3.142-8.854-15.709-8.854-18.851 0L29.782 199.732h131.961L105.187 24.926zm56.556 174.806L256 493.714l94.257-293.982H161.743zm349.324 87.974l-28.849-87.974L256 493.714l247.926-184.015c6.855-5.142 9.711-13.996 7.141-21.993zm-85.404-262.78c-3.142-8.854-15.709-8.854-18.851 0l-56.555 174.806h131.961L425.663 24.926z"></path></svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+    
+    <a href="https://github.com/Floraud/" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+</div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>
