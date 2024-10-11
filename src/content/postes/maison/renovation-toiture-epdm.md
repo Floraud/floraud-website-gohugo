@@ -41,7 +41,7 @@ Le plus long fut la dépose de la bâche EPDM car nous avons voulu suivre la vid
  
 Cependant, plié seulement en 2, c'était trop grand pour la manipuler correctement, même à 5, et nous avons eu du mal à maroufler toutes les bulles de la première bâche.
 
-Par conséquent, nous avons plié en 6 la deuxième bâche pour avoir une surface plus proche de la taille de ce que les fournisseurs avaient en main dans la vidéo, ce qui nous a donné un plus grand contrôle sur la bâche et pouvoir la poser plus proprement. Le défaut de cette méthode c'est que la bâche étant repliée sur elle-même, ne nous permettant pas de voir s'il y avait des bulles avant la fin de la dépose.
+Par conséquent, nous avons plié en 6 la deuxième bâche pour avoir une surface plus proche de la taille de ce que les fournisseurs avaient en main dans la vidéo, qui ressemblait à la surface d'un garage. Cela nous a donné un plus grand contrôle sur la bâche et nous a permis de la poser plus proprement. Le défaut de cette méthode c'est que la bâche étant repliée sur elle-même, cela ne nous permet pas de voir s'il y a des bulles avant de pouvoir la déplier de nouveau.
 
 ## Conclusion
 Bien que simple à poser en suivant les étapes, nous n'avons pas réalisé les finitions que nos proches ont pu réaliser par la suite. Pour réaliser l'ensemble de ces étapes, nous avons travaillé deux jours de 9h à 20h alors je conseillerais de prévoir **plus de deux jours de beau temps** pour pouvoir la poser serainement.
