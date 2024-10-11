@@ -33,12 +33,12 @@ enableRobotsTXT = true
 
 [[menu.main]]
    name = "Tech"
-   url = "categories/Tech/"
+   url = "/categories/tech/"
    weight = 10
 
 [[menu.main]]
   name = "Maison"
-  url = "/categories/Maison/"
+  url = "/categories/maison/"
   weight = 20
 
 [taxonomies]
