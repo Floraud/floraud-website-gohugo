@@ -1,6 +1,6 @@
 services:
   hugo:
-    image: "hugomods/hugo:base-0.134.3"
+    image: "hugomods/hugo:base-0.138.0"
     # La commande ci-dessous est obligatoire pour lancer le service
     command: server
     volumes:

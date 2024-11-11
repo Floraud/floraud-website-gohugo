@@ -2,7 +2,7 @@
 Je souhaitais faire un blog mais je trouvais ça trop lourd en ressources et administration de passer par un WordPress ou un Ghost avec une base de donnée. Après quelques recherches, Hugo semblait être une solution populaire et idéale pour mon besoin donc j'ai décidé de la tester. 
 
 ## docker-compose
-Pour déployer le site, j'utilise un fichier **docker-compose.yml**. L'image docker provient de [HugoMods](https://docker.hugomods.com/docs/development/docker-compose/).
+Pour déployer le site, j'utilise un fichier **docker-compose.yml**. L'image docker provient de [HugoMods](https://docker.hugomods.com/docs/development/docker-compose/). Pour le moment, je n'arrive pas à faire fonctionner l'image officielle sortie à la 0.135.0 car, bien que n'ayant pas d'erreur en lançant le docker-compose, la page web est inaccessible et offre des resets de connexion.
 
 Pour lancer le site, dans le dossier docker, il faudra jouer la commande `docker compose -f <filename> up`
 

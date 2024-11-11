@@ -1,6 +1,8 @@
 services:
   hugo:
-    image: "hugomods/hugo:base-0.134.3"
+    image: "hugomods/hugo:base-0.138.0"
+    environment: 
+    - "HUGO_ENV=production"
     # La commande ci-dessous est obligatoire pour lancer le service
     command: server --appendPort=false --baseURL="floraud.fr/"
     volumes:

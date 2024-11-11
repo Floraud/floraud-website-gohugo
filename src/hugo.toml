@@ -10,8 +10,9 @@ description = "Blog personnel sur la tech et mes autres passions"
 DefaultContentLanguage = "fr"
 # Commenter la section du dessous permet de ne pas reprendre automatiquement les dossiers comme "content/postes/"
 # SectionPagesMenu = "main"
-Paginate = 3 # this is set low for demonstrating with dummy content. Set to a higher number
-# googleAnalytics = ""
+
+# Nombre d'article par page
+pagination.pagerSize = 3
 enableRobotsTXT = true
 
 [sitemap]
@@ -31,6 +32,31 @@ enableRobotsTXT = true
   background_color_class = "bg-black"
   recent_posts_number = 3
 
+[params.ananke.social]
+  [params.ananke.social.follow]
+  new_window_icon = true
+  networks = [
+  "gitlab",
+  "github"
+  ]
+
+[params.ananke.social.gitlab]
+username = "Floraud"
+
+[params.ananke.social.github]
+username = "Floraud"
+
+[params.ananke.social.share]
+icons = true
+sharetext = true
+networks = [
+  "email",
+  "linkedin",
+  "mastodon",
+  "facebook",
+  "x-twitter",
+]
+
 [[menu.main]]
    name = "Tech"
    url = "/categories/tech/"
@@ -44,11 +70,3 @@ enableRobotsTXT = true
 [taxonomies]
   category = "categories"
   tag = "tags"
-
-[[params.ananke_socials]]
-  name ="gitlab"
-  url = "https://gitlab.com/Floraud/"
-
-[[params.ananke_socials]]  
-  name = "github"
-  url = "https://github.com/Floraud/"
