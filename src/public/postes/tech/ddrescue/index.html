@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Récupérer les données d&#39;un disque dur défaillant avec ddrescue | Floraud</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="Aujourd&rsquo;hui, un proche est venu me voir avec un disque dur défaillant. Je voudrais vous présenter comment nous avons pu sauver 99.99% des données sans débourser un centime ou utiliser un outil d&rsquo;une entreprise obscure.
+Ça ne fait jamais plaisir en tant qu&rsquo;informaticien de la famille, lorsque vous ne cessez de sensibiliser vos utilisateurs concernant la règle des 3-2-1 pour les sauvegardes de données, quand l&rsquo;on vient vous voir avec un disque dur externe défaillant sur lequel la personne possède toute sa vie, qu&rsquo;il semble irrécupérable et que vous êtes sa dernière chance de récupérer tout ça.">
+    <meta name="generator" content="Hugo 0.134.3">
+    
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    
+      <meta name="author" content = "Floraud">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+    
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/postes/tech/ddrescue/">
+    
+
+    <meta property="og:url" content="http://localhost:1313/postes/tech/ddrescue/">
+  <meta property="og:site_name" content="Floraud">
+  <meta property="og:title" content="Récupérer les données d&#39;un disque dur défaillant avec ddrescue">
+  <meta property="og:description" content="Aujourd’hui, un proche est venu me voir avec un disque dur défaillant. Je voudrais vous présenter comment nous avons pu sauver 99.99% des données sans débourser un centime ou utiliser un outil d’une entreprise obscure.
+Ça ne fait jamais plaisir en tant qu’informaticien de la famille, lorsque vous ne cessez de sensibiliser vos utilisateurs concernant la règle des 3-2-1 pour les sauvegardes de données, quand l’on vient vous voir avec un disque dur externe défaillant sur lequel la personne possède toute sa vie, qu’il semble irrécupérable et que vous êtes sa dernière chance de récupérer tout ça.">
+  <meta property="og:locale" content="fr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="postes">
+    <meta property="article:published_time" content="2024-11-10T18:36:34+02:00">
+    <meta property="article:modified_time" content="2024-11-10T18:36:34+02:00">
+    <meta property="article:tag" content="Hardware">
+    <meta property="article:tag" content="Systeme">
+    <meta property="article:tag" content="Stockage">
+    <meta property="article:tag" content="Linux">
+
+  <meta itemprop="name" content="Récupérer les données d&#39;un disque dur défaillant avec ddrescue">
+  <meta itemprop="description" content="Aujourd’hui, un proche est venu me voir avec un disque dur défaillant. Je voudrais vous présenter comment nous avons pu sauver 99.99% des données sans débourser un centime ou utiliser un outil d’une entreprise obscure.
+Ça ne fait jamais plaisir en tant qu’informaticien de la famille, lorsque vous ne cessez de sensibiliser vos utilisateurs concernant la règle des 3-2-1 pour les sauvegardes de données, quand l’on vient vous voir avec un disque dur externe défaillant sur lequel la personne possède toute sa vie, qu’il semble irrécupérable et que vous êtes sa dernière chance de récupérer tout ça.">
+  <meta itemprop="datePublished" content="2024-11-10T18:36:34+02:00">
+  <meta itemprop="dateModified" content="2024-11-10T18:36:34+02:00">
+  <meta itemprop="wordCount" content="1204">
+  <meta itemprop="keywords" content="Hardware,Systeme,Stockage,Linux">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Récupérer les données d&#39;un disque dur défaillant avec ddrescue">
+  <meta name="twitter:description" content="Aujourd’hui, un proche est venu me voir avec un disque dur défaillant. Je voudrais vous présenter comment nous avons pu sauver 99.99% des données sans débourser un centime ou utiliser un outil d’une entreprise obscure.
+Ça ne fait jamais plaisir en tant qu’informaticien de la famille, lorsque vous ne cessez de sensibiliser vos utilisateurs concernant la règle des 3-2-1 pour les sauvegardes de données, quand l’on vient vous voir avec un disque dur externe défaillant sur lequel la personne possède toute sa vie, qu’il semble irrécupérable et que vous êtes sa dernière chance de récupérer tout ça.">
+
+	
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  
+  <header class="cover bg-top" style="background-image: url('https://nas.floraud.fr/drive/d/s/10t1gpaYewE8jqyI7LjKXvU925liMZ5e/webapi/entry.cgi/art-wall-kittenprint-9Wq1HpghQ4A-unsplash.jpg?api=SYNO.SynologyDrive.Files&amp;method=download&amp;version=2&amp;files=%5B%22id%3A851314026162993291%22%5D&amp;force_download=false&amp;download_type=%22download%22&amp;sharing_token=%22EIGw14eIsOGmQXw5G9ZJrWjaUZCEw_0aFCw2E69zylRkdnTC1UQdHz2OMJCjVvARL7YGpKTfqI_3uLMzBobOdCgi8FK0gsNO83cTvZLOSqbP93rWMK_Us20PopAGIMuN4drqr1cnCp9Wg.9CKBeLqFx1DNS18LDkeiET4uqWVc8WK7yocQccrv1poDaKeljcNmie5MIm8FFwNf9_cnnK2f_9TqkZPgEDXZrCwtfSIDShVznT4v62GSw4%22&amp;_dc=1731314197761');">
+    <div class="bg-black-60">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Floraud
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="/categories/tech/" title="Tech page">
+              Tech
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="/categories/maison/" title="Maison page">
+              Maison
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+<div class="ananke-socials">
+  
+    
+    <a href="https://gitlab.com/Floraud/" target="_blank" rel="noopener" class="gitlab ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitLab link" aria-label="follow on GitLab——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M29.782 199.732L256 493.714 8.074 309.699c-6.856-5.142-9.712-13.996-7.141-21.993l28.849-87.974zm75.405-174.806c-3.142-8.854-15.709-8.854-18.851 0L29.782 199.732h131.961L105.187 24.926zm56.556 174.806L256 493.714l94.257-293.982H161.743zm349.324 87.974l-28.849-87.974L256 493.714l247.926-184.015c6.855-5.142 9.711-13.996 7.141-21.993zm-85.404-262.78c-3.142-8.854-15.709-8.854-18.851 0l-56.555 174.806h131.961L425.663 24.926z"></path></svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+    
+    <a href="https://github.com/Floraud/" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+</div>
+
+    </div>
+  </div>
+</nav>
+
+      <div class="tc-l pv6 ph3 ph4-ns">
+        
+          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Récupérer les données d&#39;un disque dur défaillant avec ddrescue</div>
+          
+        
+      </div>
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Postes
+      </aside>
+      
+
+
+
+
+
+
+
+
+
+
+  <div id="sharing" class="mt3 ananke-socials">
+    
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Récupérer les données d&#39;un disque dur défaillant avec ddrescue</h1>
+      
+      <p class="tracked">
+        Par <strong>Floraud</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-11-10T18:36:34+02:00">novembre 10, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links black pr4-l w-two-thirds-l"><p>Aujourd&rsquo;hui, un proche est venu me voir avec un disque dur défaillant. Je voudrais vous présenter comment nous avons pu sauver 99.99% des données sans débourser un centime ou utiliser un outil d&rsquo;une entreprise obscure.</p>
+<p>Ça ne fait jamais plaisir en tant qu&rsquo;informaticien de la famille, lorsque vous ne cessez de sensibiliser vos utilisateurs concernant <a href="https://fr.wikipedia.org/wiki/Sauvegarde_(informatique)#Strat%C3%A9gie_3-2-1">la règle des 3-2-1</a> pour les sauvegardes de données, quand l&rsquo;on vient vous voir avec un disque dur externe défaillant sur lequel la personne possède toute sa vie, qu&rsquo;il semble irrécupérable et que vous êtes sa dernière chance de récupérer tout ça.</p>
+<p>Bien qu&rsquo;il existe des entreprises spécialisées dans le domaine, tout le monde n&rsquo;a pas des centaines ou milliers d&rsquo;euros à débourser dans la récupération de leurs données, c&rsquo;est pourquoi je me suis lancé dans cette aventure.</p>
+<p>Avant d&rsquo;agir, analysons le problème.</p>
+<p><strong>Attention</strong> : <strong>Chaque action</strong> que vous faites sur un stockage défectueux <strong>peut être la dernière</strong> s&rsquo;il est déjà dans un mauvais état. Effectivement, chaque nouveau travail dessus peut l&rsquo;user davantage et lui être fatal donc réfléchissez bien avant d&rsquo;agir. L&rsquo;intérêt de l&rsquo;outil que l&rsquo;on va utiliser par la suite (ddrescue) est que l&rsquo;on va créer une image identique du disque que l&rsquo;on essaye de sauver, ce qui permet de s&rsquo;affranchir de ces risques par la suite en effectuant une copie brute, bit par bit du disque.</p>
+<h2 id="analyse-de-létat-du-disque">Analyse de l&rsquo;état du disque</h2>
+<p>C&rsquo;est un SSD externe de 500 Go de stockage et vieux de 12 ans. Lorsqu&rsquo;il est branché, il émet un sifflement, qui d&rsquo;après un collègue expérimenté en électronique, pourrait provenir d&rsquo;un condensateur défectueux. Une panne sérieuse donc.
+Pour me démonter le problème, l&rsquo;utilisateur le branche à son PC (Windows) pour que je puisse observer le comportement. Effectivement, on peut voir les dossiers à la racine du disque dans l&rsquo;explorateur Windows mais dès que l&rsquo;on réalise un clic gauche ou droit sur un dossier, le disque ne répond plus et peut se déconnecter de l&rsquo;ordinateur, de même pour toute action de copie classique. Cela peut s&rsquo;expliquer par la tentative de lecture de certains secteurs déféctueux.</p>
+<p>En le rebranchant, je tente quand même d&rsquo;utiliser un de mes câbles micro-USB que je sais fonctionnel mais nous n&rsquo;avons pas plus de chance.</p>
+<p>Je prends la décision de tenter un robocopy Windows qui est une des méthodes de copy les plus fiables sur l&rsquo;OS de Microsoft.</p>
+<p>En cmd, je passe la commande suivante :</p>
+<p><code>robocopy &quot;E:\&quot; &quot;D:\Recup&quot; /E /Z /R:5 /W:5 /LOG:&quot;D:\Recup\log.txt&quot;</code> où :</p>
+<ul>
+<li><strong>&ldquo;E:&quot;</strong> : le disque source.</li>
+<li><strong>&ldquo;D:\Recup&rdquo;</strong> : le chemin du dossier de destination.</li>
+<li><strong>/E</strong> : on copie tous les sous-dossiers/</li>
+<li><strong>/Z</strong> : on active l&rsquo;option de redémarrage pour relancer la copie même si la connexion est perdue comme dans le cas de ce disque.</li>
+<li><strong>/R:5</strong> : on limite le nombre de tentatives de lecture des fichiers problématiques à 5 sinon c&rsquo;est infini ou presque.</li>
+<li><strong>/W:5</strong> : on attend 5 secondes entre chaque tentative.</li>
+<li><strong>/LOG:&ldquo;D:\Récupération\log.txt&rdquo;</strong> : on garde un rapport de ce qui a été copié, ce qui pour moi est indispensable dans ce genre de cas.</li>
+</ul>
+<p>Le processus est particulièrement long et je décide d&rsquo;attendre le lendemain pour voir le résultat. Finalement, seulement 17 Go sur les plus de 200 Go de données sont obtenues de cette manière.</p>
+<p>Je prends donc la décision de le brancher sur mon système Linux pour voir s&rsquo;il me permet de mieux accéder aux fichiers.</p>
+<h2 id="linux-et-ddrescue">Linux et ddrescue</h2>
+<p>Pas de chance, sous Fedora en interface graphique, j&rsquo;observe le même problème que sous Windows et en ligne de commande, la commande de copie (cp) ne semble pas répondre correctement et tourne dans le vide sans résultat.</p>
+<p>Je me renseigne sur Internet et trouve le logiciel <strong>ddrescue</strong> qui semble prometteur.</p>
+<p>En bref <strong>ddrescue permet de copier les données d&rsquo;un disque et de les reproduire à l&rsquo;identique sur un autre disque</strong>. Ça tombe bien, je possède un disque sain en plus !</p>
+<p>Une fois les disques branchés, j&rsquo;ai utilisé la commande <strong>lsblk</strong> pour bien vérifier les lettres de ceux-ci afin de ne pas me tromper dans la commande et ne pas copier mon disque vierge sur le disque à récupérer. Cette erreur peut être fatale.</p>
+<p>J&rsquo;ai ensuite lancé la commande <code>ddrescue -f -d -r 3 /dev/sda /dev/sdb /home/floraud/ddrescue.log</code> où :</p>
+<ul>
+<li><strong>-f</strong> : force l’écriture sur le disque cible, je n&rsquo;ai pas eu le choix de l&rsquo;utiliser pour lancer ddrescue.</li>
+<li><strong>-d</strong>  : lit directement depuis le disque en sautant le cache, ça serait utilise pour certains secteurs défectueux et de mon côté le traitement restait bloqué si je ne l&rsquo;utilisais pas.</li>
+<li><strong>-r 3</strong> : limite le nombre de tentatives de relecture des secteurs endommagés à 3 fois.</li>
+<li><strong>/dev/sda</strong> : disque source.</li>
+<li><strong>/dev/sdb</strong> : disque destination.</li>
+<li><strong>/home/user/ddrescue.log</strong> : destination de votre fichier de log. C&rsquo;est très important car en cas de plantage de la commande ou, si vous souhaitez relancer des actions supplémentaires, il pourra en récupérer le dernier l&rsquo;état rencontré car il liste les secteurs du disque recupérés ou endommagés.</li>
+</ul>
+<p>Un exemple du monitor que vous aurez :</p>
+<pre tabindex="0"><code>ipos: 59073 MB, non-trimmed: 0 B, current rate: 0 B/s
+opos: 59073 MB, non-scraped: 49664 B, average rate: 4185 kB/s
+non-tried: 0 B, bad-sector: 134144 B, error rate: 2 B/s
+rescued: 500107 MB, bad areas: 28, run time: 1d 9h 11m
+pct rescued: 99.99%, read errors: 281, remaining time: n/a time since last successful read: 6h 27m 5s
+Scraping failed blocks... (forwards)
+</code></pre><p>Ça prend du temps, et il est difficile de donner une fourchette car je pense que ça dépend de l&rsquo;état de santé de votre disque et des capacités matérielles de votre PC. Dans mon cas, pour 500 Go, le temps estimé ne cessait de varier entre 7 et 12 heures de travail mais finalement ça a duré 2 jours. J&rsquo;ai vaqué à mes occupations le temps de le laisser tourner.</p>
+<p>À mon retour la console indiquait <strong>rescued: 99,99%</strong> soit la quasi totalité des données restaurées, j&rsquo;étais extrêmement soulagé. J&rsquo;ai vu que certains tentent de faire un passage en ajoutant à la commande précédente <strong>l&rsquo;argument -R</strong> qui permet de relancer ce que l&rsquo;on a fait précédemment mais à l&rsquo;envers. J&rsquo;ai donc tenté mais je n&rsquo;ai pas récupéré un Mb en plus.</p>
+<p><strong>Note</strong> : Sur le disque de destination, vous ne verrez peut-être pas d’évolution de l&rsquo;espace utilisé en interface graphique. Bien qu’inquiétant, cela n&rsquo;a pas d&rsquo;impact ; j’avais bien les données à la fin.</p>
+<p>J&rsquo;ai pu rebrancher le nouveau disque sur l&rsquo;équipement de mon utilisateur et il ressemblait à ce qu&rsquo;il avait auparavant sauf que cette fois on pouvait naviguer dans les dossiers et les copier. Je lui ai fait tout copier ailleurs et le 0,01% devait correspondre à un fichier d&rsquo;install d&rsquo;un VST de musique puisqu&rsquo;il était impossible de le copier. Rien de grave, ouf !</p>
+<p><strong>En bref : je vous recommande ddrescue comme outil pour sauver vos données d&rsquo;un disque défectueux si vous avez un problème. Prenez bien le temps de vérifier votre commande avant de la lancer, notamment le disque source et destination et de bien lancer le logging des informations. Mais surtout, de bien appliquer <a href="https://fr.wikipedia.org/wiki/Sauvegarde_(informatique)#Strat%C3%A9gie_3-2-1">la règle des 3-2-1</a>, c&rsquo;est à dire que vous devez au minimum avoir 3 copies des données, sur au moins 2 médias différents afin d&rsquo;éviter des écueils physiques similaires et 1 ailleurs qui peut être le cloud</strong></p>
+<ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/hardware/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Hardware</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/systeme/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Systeme</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/stockage/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Stockage</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/linux/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Linux</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://localhost:1313/" >
+    &copy;  Floraud 2024 
+  </a>
+    <div>
+<div class="ananke-socials">
+  
+    
+    <a href="https://gitlab.com/Floraud/" target="_blank" rel="noopener" class="gitlab ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitLab link" aria-label="follow on GitLab——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M29.782 199.732L256 493.714 8.074 309.699c-6.856-5.142-9.712-13.996-7.141-21.993l28.849-87.974zm75.405-174.806c-3.142-8.854-15.709-8.854-18.851 0L29.782 199.732h131.961L105.187 24.926zm56.556 174.806L256 493.714l94.257-293.982H161.743zm349.324 87.974l-28.849-87.974L256 493.714l247.926-184.015c6.855-5.142 9.711-13.996 7.141-21.993zm-85.404-262.78c-3.142-8.854-15.709-8.854-18.851 0l-56.555 174.806h131.961L425.663 24.926z"></path></svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+    
+    <a href="https://github.com/Floraud/" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+</div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>
