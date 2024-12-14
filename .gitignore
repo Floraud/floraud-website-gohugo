@@ -1,1 +1,7 @@
 hugo_cache/
+
+# Pour ne pas alourdir le git
+src/static/images/
+
+# Fichiers générés par Hugo
+src/public/

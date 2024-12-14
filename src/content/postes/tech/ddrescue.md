@@ -2,7 +2,7 @@
 title = "Récupérer les données d'un disque dur défaillant avec ddrescue"
 categories = ["Tech"]
 tags = ["Hardware", "Systeme", "Stockage", "Linux"]
-featured_image = "https://nas.floraud.fr/drive/d/s/10t1gpaYewE8jqyI7LjKXvU925liMZ5e/webapi/entry.cgi/art-wall-kittenprint-9Wq1HpghQ4A-unsplash.jpg?api=SYNO.SynologyDrive.Files&method=download&version=2&files=%5B%22id%3A851314026162993291%22%5D&force_download=false&download_type=%22download%22&sharing_token=%22EIGw14eIsOGmQXw5G9ZJrWjaUZCEw_0aFCw2E69zylRkdnTC1UQdHz2OMJCjVvARL7YGpKTfqI_3uLMzBobOdCgi8FK0gsNO83cTvZLOSqbP93rWMK_Us20PopAGIMuN4drqr1cnCp9Wg.9CKBeLqFx1DNS18LDkeiET4uqWVc8WK7yocQccrv1poDaKeljcNmie5MIm8FFwNf9_cnnK2f_9TqkZPgEDXZrCwtfSIDShVznT4v62GSw4%22&_dc=1731314197761"
+featured_image = "/images/tech/ddrescue_cover_art-wall-kittenprint.webp"
 date = 2024-11-10T18:36:34+02:00
 +++
 

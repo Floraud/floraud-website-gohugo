@@ -54,7 +54,6 @@ networks = [
   "linkedin",
   "mastodon",
   "facebook",
-  "x-twitter",
 ]
 
 [[menu.main]]

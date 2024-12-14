@@ -2,7 +2,7 @@
 title = 'Déploiement de containers WordPress sur un serveur avec Docker Compose'
 categories = ["Tech"]
 tags = ["DevOps", "Docker Compose", "Container", "WordPress", "Traefik"]
-featured_image = "https://nas.floraud.fr/drive/d/s/10RXdWk5cmWdqY0zLyisEsgAXE7JUQ11/webapi/entry.cgi/wordpress-containers_erwan-hesry-RJjY5Hpnifk-unsplash.jpg?api=SYNO.SynologyDrive.Files&method=download&version=2&files=%5B%22id%3A845313007207627857%22%5D&force_download=false&download_type=%22download%22&sharing_token=%22.AiIwnuzwXFx8X2rOur53g1zunW8cWdQib80ouzNHaexoeqWZHM3iPiKzbEFajNoFdRF2CnrA4jtKBD6tigoVwmTrd_Py10WcngRpp1NvHaBx3aVODP7v1YXiBrb9CjWFxXcMJQ8xXmKT856mse2m4jO2rGhK5YIvqE78I3nDmWPcVWtOMF8AyQThmU0A.6Z4NPS_FBk8QWNrMbFOfrTgZbrOvuIKb9pDxlkGzN6GuSx149_E88wH4h6%22&_dc=1731315640591"
+featured_image = "/images/tech/wordpress-containers_cover_erwan-hesry.webp"
 date = 2024-01-14T18:07:07+01:00
 +++
 
@@ -29,7 +29,7 @@ L'objectif à la fin est de disposer de l'architecture suivante sur le serveur :
 - Chaque container WordPress ne doit entrer qu'en communication avec Traefik et son propre MariaDB.
 - Chaque site a son propre réseau isolé de l'autre site.
 
-![topologie](https://nas.floraud.fr/drive/d/s/10RXFrGTXO8aeCS2k91txfU1zsgxttxY/webapi/entry.cgi/wordpress-containers_topology.png?api=SYNO.SynologyDrive.Files&method=download&version=2&files=%5B%22id%3A845311662803172373%22%5D&force_download=false&download_type=%22download%22&sharing_token=%22K4iqwWU0fnzHqPY4JbYEFNueGTrEv10XuKIrUO_m0zjRqLYmPww21HOYHMm3iyvsc6Osfvb5lHQ1PZFqn7NdEXW9BOQDLflTLoLNE_xpkLP06hd214gpYiHGPBsUf2qa3Q..SzoSpaAQFEu71am2ftM_8BRTj0sUJn2sAu3j_7VDHP7P1ujE2ZaeYmtGfTWweOmCTj.0Ea.7PAdxydXdkwrFoBLf2wILqY.WyQfHlxz7CmaYEn4LNExb%22&_dc=1731316397162)
+![topologie](/images/tech/wordpress-containers_topology.webp)
 
 Pour que le code soit plus facilement exploitable, il a été divisé en différents fichiers :
 - `docker-compose.yml` : contient la configuration réseau.
