@@ -69,3 +69,9 @@ networks = [
 [taxonomies]
   category = "categories"
   tag = "tags"
+
+# Nécessaire pour accepter l'ajout d'html dans une page comme la recherche actuelle dans _index.md  (voir si on peut faire autrement)
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

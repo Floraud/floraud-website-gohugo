@@ -5,3 +5,8 @@ src/static/images/
 
 # Fichiers générés par Hugo
 src/public/
+
+# pagefind
+src/package-lock.json
+src/package.json
+src/node_modules

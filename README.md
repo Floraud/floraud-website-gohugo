@@ -14,7 +14,6 @@ C'est le fichier dans lequel on peut adapter la majorité de la configuration du
 
 J'ai commenté la partie **SectionPagesMenu = "main"** afin de ne pas reprendre automatiquement l'arborescence des dossiers dans le menu. J'ai utilisé la partie **[[menu.main]]** du **sitemap** pour gérer cette partie.
 
-
 ### Contenu multimédia
 J'ai réalisé qu'il y aurait certainement trop de contenu multimédia à stocker. J'ai donc décider de créer des liens vers une ressource externe plutôt que stocker la majorité dans les sources.
 
@@ -24,3 +23,30 @@ Pour créer un article, il me suffit d'ajouter un fichier markdown dans le dossi
 ## Troubleshooting
 ### Dossier public
 Le dossier public peut comporter plus d'entrées que prévu si on a effectué des essais. Par conséquent, il est possible de le supprimer à la main avant de créer le serveur avec docker compose et a priori il le recréera automatiquement.
+
+## To Do
+- [ ] Voir pour que les sommaires dans floraud.fr/postes ne remontent pas dans la recherche
+- [ ] Voir si on peut faire autrement qu'accepter l'html dans les postes pour ajouter la barre de recherche
+- [ ] voir pour faire un script bash pour créer le dossier public du site avant qu'il soit indexé par pagefind
+```
+#!/bin/sh
+# Démarrer Hugo pour générer le site
+hugo
+
+# Installer Pagefind et l'exécuter sur le dossier public
+npm install -g pagefind
+pagefind --site ./public
+```
+
+```
+services:
+  hugo:
+    image: "hugomods/hugo:base-0.140.2"
+    command: sh -c "./start.sh"
+    volumes:
+      - "$PWD/src:/src"
+      - "$PWD/hugo_cache:/tmp/hugo_cache"
+      - "$PWD/start.sh:/start.sh"  # Ajouter le script au volume
+    ports:
+      - "1313:1313"
+```
