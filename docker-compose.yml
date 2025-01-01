@@ -1,6 +1,6 @@
 services:
   hugo:
-    image: "hugomods/hugo:base-0.138.0"
+    image: "hugomods/hugo:base-0.140.1"
     environment: 
     - "HUGO_ENV=production"
     # La commande ci-dessous est obligatoire pour lancer le service
