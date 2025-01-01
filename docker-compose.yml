@@ -6,7 +6,7 @@ services:
     # La commande ci-dessous est obligatoire pour lancer le service
     command: server --appendPort=false --baseURL="floraud.fr/"
     volumes:
-      - "/volume1/docker/floraud-website-gohugo/src:/src"
-      - "/volume1/docker/floraud-website-gohugo/hugo_cache:/tmp/hugo_cache"
+      - "/volume2/docker/floraud-website-gohugo/src:/src"
+      - "/volume2/docker/floraud-website-gohugo/hugo_cache:/tmp/hugo_cache"
     ports:
       - "1313:1313"
