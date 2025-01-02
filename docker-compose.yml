@@ -3,7 +3,7 @@ services:
     image: "hugomods/hugo:base-0.140.2" # image officielle ne fonctionne pas pour l'install de pagefind
     environment: 
     - "HUGO_ENV=production"
-    # La commande ci-dessous est obligatoire pour lancer le service
+    # La commande ci-dessous dans cet ordre est obligatoire pour lancer le service car il faut d'abord build le site pour que pagefind puisse l'indexer avant de le lancer.
     command: sh -c "
       hugo && \
       apk add nodejs npm && \
