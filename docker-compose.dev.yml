@@ -1,16 +1,11 @@
 services:
   hugo:
-    image: "hugomods/hugo:base-0.140.2"
-    # La commande ci-dessous est obligatoire pour lancer le service
-    command: sh -c "
-      hugo --minify && \
-      apk add --no-cache nodejs npm && \
-      npm install -g pagefind && \
-      pagefind --site ./public/postes/ && \
-      server"
-
+    image: "ghcr.io/gohugoio/hugo:v0.140.2" # Image officielle
+    user: "root"  # Difficile de gérer les droits de volume et pagefind sans ça, et l'image non officielle utilisait déjà le root
+    entrypoint: "/script-bash/build.sh"
     volumes:
       - "$PWD/src:/src"
       - "$PWD/hugo_cache:/tmp/hugo_cache"
+      - "$PWD/script-bash:/script-bash"  # Ajouter le script au volume
     ports:
       - "1313:1313"
