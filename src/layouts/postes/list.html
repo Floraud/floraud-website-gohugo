@@ -1,7 +1,16 @@
 {{ define "main" }}
-{{/*
-  This template is the same as the default and is here to demonstrate that if you have a content directory called "post" you can create a layouts directory, just for that section.
-   */}}
+
+<div class="flex-wrap justify-between mw8 center ph3 mt4">
+  <link href="/postes/pagefind/pagefind-ui.css" rel="stylesheet">
+  <script src="/postes/pagefind/pagefind-ui.js"></script>
+  <div id="search"></div>
+  <script>
+      window.addEventListener('DOMContentLoaded', (event) => {
+          new PagefindUI({ element: "#search", showSubResults: true });
+      });
+  </script>
+</div>
+
   <article class="pa3 pa4-ns nested-copy-line-height">
     <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy {{ $.Param "text_color" | default "mid-gray" }}">
       {{ .Content }}
