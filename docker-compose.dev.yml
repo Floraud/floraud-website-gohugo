@@ -2,8 +2,8 @@ services:
   hugo:
     image: "hugomods/hugo:base-0.140.2"
     # La commande ci-dessous est obligatoire pour lancer le service
-    # command: server
     command: sh -c "
+      hugo --minify && \
       apk add --no-cache nodejs npm && \
       npm install -g pagefind && \
       pagefind --site ./public/postes/ && \
