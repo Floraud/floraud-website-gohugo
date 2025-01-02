@@ -29,4 +29,4 @@ Aujourd'hui, il m'est nécessaire de **relancer le docker-compose** à la créat
 Je l'ai choisi car c'est une solution locale.
 
 ## To Do
-- [ ] Télécharger localement pagefind v1.3.0 et voir si possible de le monter localement au cas où un jour il n'est plus accessible.
+- [ ] Télécharger localement pagefind v1.3.0 et voir si possible de le monter via un volume dans le container au cas où un jour il n'est plus accessible sur internet en téléchargement direct.
