@@ -29,4 +29,6 @@ Aujourd'hui, il m'est nécessaire de **relancer le docker-compose** à la créat
 Je l'ai choisi car c'est une solution locale.
 
 ## To Do
-- [ ] Télécharger localement pagefind v1.3.0 et voir si possible de le monter via un volume dans le container au cas où un jour il n'est plus accessible sur internet en téléchargement direct.
+- Il faut penser à récupérer les versions de pagefind que j'utilise au cas où un jour ce n'est plus accessible. Pour se faire :
+- Depuis un distrib Linux, créez un répertoire `mkdir ~/pagefind-v1.3.0`
+- Lancez la commande `npm install pagefind@1.3.0` 
