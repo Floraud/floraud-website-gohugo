@@ -5,6 +5,7 @@ src/static/images/
 
 # Fichiers générés par Hugo
 src/public/
+src/.hugo_build.lock
 
 # pagefind
 src/package-lock.json
