@@ -111,7 +111,7 @@ peer-keepalive destination 192.0.2.1 source 192.0.2.2 vrf vpc_keepaliveend
 
 On contrôle que la commande est bien passée : `sh run vpc`.
 
-5. **Contrôles post-configuration**.
+### 6. Contrôles post-configuration
 
 - `sh vpc`
 ```
