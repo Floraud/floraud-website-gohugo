@@ -105,8 +105,8 @@ end
 Switch 2 :
 ```
 vpc domain 1
-peer-keepalive destination 192.0.2.1 source 192.0.2.2 vrf vpc_keepaliveend
-
+peer-keepalive destination 192.0.2.1 source 192.0.2.2 vrf vpc_keepalive
+end
 ```
 
 On contrôle que la commande est bien passée : `sh run vpc`.
