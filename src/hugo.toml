@@ -23,7 +23,6 @@ enableRobotsTXT = true
 
 [params]
   text_color = "black"
-  author = "Floraud"
   favicon = ""
   site_logo = ""
   # La description ci-dessous permet de reprendre ce paramètre dans un template
@@ -46,15 +45,15 @@ username = "Floraud"
 [params.ananke.social.github]
 username = "Floraud"
 
-[params.ananke.social.share]
-icons = true
-sharetext = true
-networks = [
-  "email",
-  "linkedin",
-  "mastodon",
-  "facebook",
-]
+# [params.ananke.social.share]
+# icons = true
+# sharetext = true
+# networks = [
+#   "email",
+#   "linkedin",
+#   "mastodon",
+#   "facebook",
+# ]
 
 [[menu.main]]
    name = "Tech"
