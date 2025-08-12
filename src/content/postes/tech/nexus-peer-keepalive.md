@@ -148,3 +148,5 @@ Et on oublie pas son `copy run start` ! 😉
 **Bien configurer son peer keepalive** permet de laisser l'équipe réseau dormir sur ses deux oreilles lors d'un incident aussi grave que l'arrêt électrique d'un datacenter. On a ainsi la **certitude que nos Cisco Nexus seront capables de reprendre la main correctement une fois de nouveau alimentés électriquement**.
 
 Pour aller plus loin on pense aussi à mettre en place la supervision de ce lien afin de s'assurer de ne plus jamais être surpris.
+
+*Photo de bannière par [Monisha Selvakumar](https://unsplash.com/fr/@monishaselv?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) sur [Unsplash](https://unsplash.com/fr/photos/un-gros-plan-dune-fleur-avec-beaucoup-de-lumieres-floues-qv8f7x7QtZo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)*

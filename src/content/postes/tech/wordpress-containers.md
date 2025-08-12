@@ -232,3 +232,5 @@ Dans le dossier, lancez le déploiement des containers à l'aide de `docker comp
 
 ## Conclusion
 Bien que ce lab soit imparfait pour de la production car il n'y a pas d'orchestration pour gérer le cycle de vie des containers et la haute-disponibilité (ce que permet de faire un outil comme Kubernetes), on est maintenant en mesure de déployer simplement et à volonté des containers sur notre serveur pour réaliser nos tests sans nous ruiner. Cela nous a permis de découvrir le concept de container et une des solutions majeures sur le marché qu'est Docker pour pouvoir monter des labs rapidement.
+
+*Photo de bannière par [Erwan Hesry](https://unsplash.com/fr/@erwanhesry?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) sur [Unsplash](https://unsplash.com/fr/photos/plusieurs-conteneurs-de-fret-RJjY5Hpnifk?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)*

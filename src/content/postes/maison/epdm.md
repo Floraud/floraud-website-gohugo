@@ -47,3 +47,6 @@ Par conséquent, nous avons plié en 6 la deuxième bâche pour avoir une surfac
 Bien que simple à poser en suivant les étapes, nous n'avons pas réalisé les finitions que nos proches ont pu réaliser par la suite. Pour réaliser l'ensemble de ces étapes, nous avons travaillé deux jours de 9h à 20h alors je conseillerais de prévoir **plus de deux jours de beau temps** pour pouvoir la poser serainement.
 
 Aussi, **bien nettoyer le sol** pour enlever toutes les impurtés avant de poser la colle de l'EPDM et bien s'assurer que le revêtement soit bien lisse.
+
+*Photo de bannière par [Setu Chhaya](https://unsplash.com/fr/@setu_chhaya?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) sur [Unsplash](https://unsplash.com/fr/photos/mousse-poussant-sur-le-toit-dun-batiment-bOtca0H5Ny8?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash")*
+      
