@@ -1,6 +1,6 @@
 services:
  hugo:
-    image: "ghcr.io/gohugoio/hugo:v0.150.1"
+    image: "ghcr.io/gohugoio/hugo:v0.151.2"
     environment: 
     - "HUGO_ENV=production"
     # Permet d'utiliser l'utilisateur root
