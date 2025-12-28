@@ -33,7 +33,7 @@ enableRobotsTXT = true
 
 [params.ananke.social.networks.git]
 label = "Git"
-profile = "https://git.floraud.fr/Floraud"
+profile = "https://git.floraud.fr/floraud"
 icon = "git-alt" 
 
 [params.ananke.social]
@@ -44,11 +44,8 @@ icon = "git-alt"
   "github"
   ]
 
-[params.ananke.social.gitlab]
-username = "Floraud"
-
 [params.ananke.social.github]
-username = "Floraud"
+username = "floraud"
 
 # [params.ananke.social.share]
 # icons = true
