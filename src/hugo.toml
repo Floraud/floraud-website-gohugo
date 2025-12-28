@@ -31,11 +31,16 @@ enableRobotsTXT = true
   background_color_class = "bg-black"
   recent_posts_number = 5
 
+[params.ananke.social.networks.git]
+label = "Git"
+profile = "https://git.floraud.fr/Floraud"
+icon = "git-alt" 
+
 [params.ananke.social]
   [params.ananke.social.follow]
   new_window_icon = true
   networks = [
-  "gitlab",
+  "git",
   "github"
   ]
 
