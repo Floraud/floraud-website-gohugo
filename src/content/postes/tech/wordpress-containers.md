@@ -7,7 +7,7 @@ date = 2024-01-14T18:07:07+01:00
 +++
 
 ## Introduction
-Nous allons étudier au cours cet article comment déployer plusieurs containers WordPress avec leurs bases de données et leurs certificats Let's Encrypt sur un seul serveur avec Docker Compose. Mon **but** est d'**optimiser l'utilisation de mon serveur VPS au maximum**, **faire des économies** et aussi pouvoir **PoCer plus facilement des solutions d'infra** qui proposent souvent des containers pour tester leurs services rapidement. Le code lié à cet article est disponible sur [le repo GitLab du lab](https://gitlab.com/Floraud/wordpress-docker).
+Nous allons étudier au cours cet article comment déployer plusieurs containers WordPress avec leurs bases de données et leurs certificats Let's Encrypt sur un seul serveur avec Docker Compose. Mon **but** est d'**optimiser l'utilisation de mon serveur VPS au maximum**, **faire des économies** et aussi pouvoir **PoCer plus facilement des solutions d'infra** qui proposent souvent des containers pour tester leurs services rapidement. Le code lié à cet article est disponible sur [le repo sur mon serveur Forgejo du lab](https://git.floraud.fr/floraud/wordpress-docker).
 
 ### Définition des concepts
 - **Container** : Un **environnement isolé sur un serveur** dans lequel est **cloisonnée une application ainsi que ses dépendances**. Son intérêt réside dans son isolation car, tout en partageant les ressources du noyau, les différents containers peuvent chacun avoir une version différente d'une dépendance qui aurait pu être commune sur le serveur. Par exemple, dans le contexte des serveurs WordPress, chaque conteneur peut avoir sa propre version de PHP sans interférer avec l'environnement du serveur ou des autres containers, offrant ainsi une gestion des dépendances plus flexible et évitant les conflits potentiels entre les différentes applications hébergées sur le même serveur. Aussi, ils sont **indépendants de l'environnement hôte**, ce qui permet leur portabilité et de les déployer aussi bien sur un PC personnel que sur un serveur Windows ou Linux.
@@ -21,7 +21,7 @@ Nous allons étudier au cours cet article comment déployer plusieurs containers
 - Un **serveur** Linux fraîchement installé (**lab testé sur Alma 8.5** et Debian 12). Personnellement j'ai pris l'offre STD-2 sur **[PulseHeberg](https://pulseheberg.com/cloud/vps-linux)**, c'est 4€ par mois, ça fonctionne bien et c'est français.
 - **Docker installé** : ça prend 5 minutes en suivant la [documentation officielle](https://docs.docker.com/engine/install/), il faut suivre la Platform CentOS si vous prenez Alma ou Rocky.
 - **Enregistrement DNS** pour chaque site que l'on veut déployer. Par exemple : *site1.votredomaine.com, site2.votredomaine.com*...
-- Téléchargez le **[code du git du lab](https://gitlab.com/Floraud/wordpress-docker/-/archive/v0.1.0/wordpress-docker-v0.1.0.tar.gz)** en fonction de l'hôte. Sur Alma il suffit de faire `curl -L0 https://gitlab.com/Floraud/wordpress-docker/-/archive/v0.1.0/wordpress-docker-v0.1.0.tar.gz | tar -xz` pour télécharger le code et décompresser le fichier.
+- Téléchargez le **[code du git du lab](https://git.floraud.fr/floraud/wordpress-docker/archive/main.tar.gz)** en fonction de l'hôte. Sur Alma il suffit de faire `curl -L0 https://git.floraud.fr/floraud/wordpress-docker/archive/main.tar.gz | tar -xz` pour télécharger le code et décompresser le fichier.
 
 ### Architecture
 L'objectif à la fin est de disposer de l'architecture suivante sur le serveur :
