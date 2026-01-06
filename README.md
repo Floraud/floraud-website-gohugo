@@ -1,15 +1,10 @@
 # Floraud Website GoHugo
 Je souhaitais faire un blog mais je trouvais ça trop lourd en ressources et administration de passer par un WordPress ou un Ghost avec une base de donnée. Après quelques recherches, Hugo semblait être une solution populaire et idéale pour mon besoin donc j'ai décidé de la tester. 
 
-## docker-compose
-Pour déployer le site, j'utilise un fichier **docker-compose.yml**. L'image docker provient de [HugoMods](https://docker.hugomods.com/docs/development/docker-compose/). 
-
-L'image officielle est créée avec l'utilisateur hugo et sans la possibilité de lancer des commandes me permettant d'installer pagefind avec les droits requis.
-
 ## Hugo
 Le thème [Ananke](https://github.com/theNewDynamic/gohugo-theme-ananke) est le thème proposé dans le [quick start](https://gohugo.io/getting-started/quick-start/) du site Hugo et il semblait convenir à mon besoin. J'ai donc décidé de commencer avec et de l'adapter à mes envies.
 
-### hugo.toml
+### config.toml
 C'est le fichier dans lequel on peut adapter la majorité de la configuration du site.
 
 J'ai commenté la partie **SectionPagesMenu = "main"** afin de ne pas reprendre automatiquement l'arborescence des dossiers dans le menu. J'ai utilisé la partie **[[menu.main]]** du **sitemap** pour gérer cette partie.
@@ -24,11 +19,9 @@ Pour créer un article, il me suffit d'ajouter un fichier markdown dans le dossi
 ### Dossier public
 Le dossier public peut comporter plus d'entrées que prévu si on a effectué des essais. Par conséquent, il est possible de le supprimer à la main avant de créer le serveur avec docker compose et a priori il le recréera automatiquement.
 
-Aujourd'hui, il m'est nécessaire de **relancer le docker-compose** à la création d'un article pour que **pagefind** (mon utilitaire de recherche) **puisse indexer les articles**.
-
 Je l'ai choisi car c'est une solution locale.
 
-## To Do
-- Il faut penser à récupérer les versions de pagefind que j'utilise au cas où un jour ce n'est plus accessible. Pour se faire :
-- Depuis un distrib Linux, créez un répertoire `mkdir ~/pagefind-v1.3.0`
-- Lancez la commande `npm install pagefind@1.3.0` 
+## TODO
+
+- [ ] Documenter la partie pagefind
+- [ ] Documenter la partie Hugo Modules
