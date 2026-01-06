@@ -1,7 +1,7 @@
 title = "Floraud"
 baseURL = "https://floraud.fr"
 languageCode = "fr"
-theme = ["ananke"]
+# theme = ["ananke"]
 # Dossier dans lequel seront stockés des fichiers optimisés que Hugo traite en interne
 resourceDir = "../resources"
 # La description ci-dessous aide à la description des metadata
@@ -16,8 +16,11 @@ pagination.pagerSize = 9
 enableRobotsTXT = true
 
 [module]
-  [[module.imports]]
-    path = "github.com/theNewDynamic/gohugo-theme-ananke/v2"
+[[module.imports]]
+disable = false
+ignoreConfig = false
+ignoreImports = false
+path = 'github.com/theNewDynamic/gohugo-theme-ananke/v2'
 
 [sitemap]
   # Permet au moteur de recherche d'indexer plus efficacement le site en suivant les consignes
