@@ -1,7 +1,6 @@
 title = "Floraud"
 baseURL = "https://floraud.fr"
 languageCode = "fr"
-# theme = ["ananke"]
 # Dossier dans lequel seront stockés des fichiers optimisés que Hugo traite en interne
 resourceDir = "../resources"
 # La description ci-dessous aide à la description des metadata
