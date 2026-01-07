@@ -1,4 +1,4 @@
-module git.floraud.fr/floraud/floraud-website-gohugo/src
+module git.floraud.fr/floraud/floraud-website-gohugo
 
 go 1.24.11
 

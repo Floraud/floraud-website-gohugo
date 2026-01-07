@@ -1,13 +1,6 @@
-hugo_cache/
-
 # Pour ne pas alourdir le git
-src/static/images/
+static/images/
 
 # Fichiers générés par Hugo
-src/public/
-src/.hugo_build.lock
-
-# pagefind
-src/package-lock.json
-src/package.json
-src/node_modules
+public/
+.hugo_build.lock
